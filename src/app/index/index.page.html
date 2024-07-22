@@ -20,7 +20,7 @@
       <input type="checkbox" [(ngModel)]="keepInfos" [ngModelOptions]="{standalone: true}">Sauvegarder mes informations
     </div>
 
-    <p *ngIf="errorMsg.length > 0" [ngClass]="'error'">{{ errorMsg }}</p>
+    <ion-alert [isOpen]="isAlertOpen" header="Information manquante" message="{{ errorMsg}}" (didDismiss)="alertOpen(false)" [buttons]="alertButtons"></ion-alert>
 
     <button (click)="verifyInfos()">Commencer</button>
   </form>

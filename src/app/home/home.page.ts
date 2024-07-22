@@ -3,13 +3,14 @@ import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/stan
 import { TitleComponent } from '../title/title.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, TitleComponent],
+  imports: [CommonModule, FormsModule, IonicModule, TitleComponent],
 })
 export class HomePage {
 

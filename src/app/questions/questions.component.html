@@ -1,8 +1,12 @@
-<h1>Bienvenue {{ pseudo }}</h1>
-
-<p *ngFor="let q of questions">{{ q.question }}</p>
-<ul *ngFor="let q of questions">
-  <li *ngFor="let p of q.propositions"><button (click)="verifyAnswer()">{{ p }}</button></li>
-</ul>
-
-<button *ngIf="nextQuestion">Question suivante</button>
+<ion-content>
+  <h1>Bienvenue {{ pseudo }}</h1>
+  
+  <p *ngFor="let q of questions">{{ q.question }}</p>
+  <ul *ngFor="let q of questions">
+    <li *ngFor="let p of q.propositions"><button (click)="verifyAnswer(this)">{{ p }}</button></li>
+  </ul>
+  
+  <button *ngIf="nextQuestion">Question suivante</button>
+  
+  <ion-toast [isOpen]="isToastOpen" message="{{ toastMsg }}" (didDismiss)="toastOpen(false)"></ion-toast>
+</ion-content>
