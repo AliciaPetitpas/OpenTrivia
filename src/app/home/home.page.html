@@ -13,7 +13,27 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
+  <ion-content [fullscreen]="true">
+    <h2>Interpolation</h2>
     <app-title></app-title>
-  </div>
+
+    <h2>Liaison par évènement (event binding)</h2>
+    <button (click)="clickMe()">Click me</button>
+
+    <h2>Liaison par propriété (property binding)</h2>
+    <img [src]="srcImg" [alt]="altImg" height="150">
+
+    <h2>Liaison à double sens (two-ways binding)</h2>
+    <label>Entrez du texte :</label>
+    <input type="text" [(ngModel)]="myText">
+    <p>{{ myText }}</p>
+
+    <h2>Les directives structurelles</h2>
+    <h5 *ngIf="listFruits.length > 0">Liste des fruits :</h5>
+    <ul>
+      <li *ngFor="let fruit of listFruits">{{ fruit }}</li>
+    </ul>
+
+    <p [ngClass]="'high-ground'">Lorem ipsum dolor sit amet</p>
+  </ion-content>
 </ion-content>
