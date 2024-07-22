@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Open Trivia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form *ngIf="isError">
+    <div [ngClass]="'form-div'">
+      <label>Pseudo</label>
+      <input [(ngModel)]="pseudo" [ngModelOptions]="{standalone: true}">
+    </div>
+    <div [ngClass]="'form-div'">
+      <label>Difficulté</label>
+      <select>
+        <option *ngFor="let level of listLevels">{{ level }}</option>
+      </select>
+    </div>
+    <div [ngClass]="'form-div'">
+      <p>{{ keepInfos }}</p>
+      <label>Sauvegarder mes informations </label>
+    </div>
+
+    <p *ngIf="errorMsg.length > 0" [ngClass]="'error'">{{ errorMsg }}</p>
+
+    <button (click)="verifyInfos()">Commencer</button>
+  </form>
+
+  <div *ngIf="!isError">
+    <app-questions></app-questions>
+  </div>
+</ion-content>
