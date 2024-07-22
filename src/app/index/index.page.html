@@ -17,8 +17,7 @@
       </select>
     </div>
     <div [ngClass]="'form-div'">
-      <p>{{ keepInfos }}</p>
-      <label>Sauvegarder mes informations </label>
+      <input type="checkbox" [(ngModel)]="keepInfos" [ngModelOptions]="{standalone: true}">Sauvegarder mes informations
     </div>
 
     <p *ngIf="errorMsg.length > 0" [ngClass]="'error'">{{ errorMsg }}</p>
