@@ -52,11 +52,20 @@ export class OpenTriviaService {
       this.replies.push(element);
     });
     this.replies.push(this.listQuestions[this.index].correct_answer);
-    return this.replies;
+
+    return this.shuffle(this.replies);
   }
 
   getCurrentAnswer() {
     return this.listQuestions[this.index].correct_answer;
+  }
+
+  shuffle(array: string[]) {
+    for (let i = array.length - 1; i > 0; i--) { 
+      const j = Math.floor(Math.random() * (i + 1)); 
+      [array[i], array[j]] = [array[j], array[i]]; 
+    } 
+    return array; 
   }
 
   incrIndex() {
