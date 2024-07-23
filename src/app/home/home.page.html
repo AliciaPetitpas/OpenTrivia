@@ -1,39 +1,41 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>Open Trivia</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form *ngIf="isError">
+    <div [ngClass]="'form-div'">
+      <ion-label>Pseudo</ion-label>
+      <ion-input [(ngModel)]="pseudo" [ngModelOptions]="{standalone: true}"></ion-input>
+    </div>
+    <div [ngClass]="'form-div'">
+      <label>Difficulté</label>
+      <ion-select>
+        <ion-select-option *ngFor="let level of listLevels">{{ level }}</ion-select-option>
+      </ion-select>
+    </div>
+    <div [ngClass]="'form-div'">
+      <ion-toggle [(ngModel)]="keepInfos" [ngModelOptions]="{standalone: true}">Sauvegarder mes informations</ion-toggle>
+    </div>
 
-  <ion-content [fullscreen]="true">
-    <h2>Interpolation</h2>
-    <app-title></app-title>
+    <ion-alert [isOpen]="isAlertOpen" header="Information manquante" message="{{ errorMsg}}" (didDismiss)="alertOpen(false)" [buttons]="alertButtons"></ion-alert>
 
-    <h2>Liaison par évènement (event binding)</h2>
-    <button (click)="clickMe()">Click me</button>
+    <ion-button (click)="verifyInfos()">Commencer</ion-button>
+  </form>
 
-    <h2>Liaison par propriété (property binding)</h2>
-    <img [src]="srcImg" [alt]="altImg" height="150">
+  <div *ngIf="!isError">
+    <h1>Bienvenue {{ pseudo }}</h1>
 
-    <h2>Liaison à double sens (two-ways binding)</h2>
-    <label>Entrez du texte :</label>
-    <input type="text" [(ngModel)]="myText">
-    <p>{{ myText }}</p>
+    <ion-text>{{ question }}</ion-text>
+    <ion-list *ngFor="let r of replies" [ngClass]="'listReplies'">
+      <ion-item><ion-button (click)="verifyAnswer(r)" disabled={{isDisabledQuestion}}>{{ r }}</ion-button></ion-item>
+    </ion-list>
 
-    <h2>Les directives structurelles</h2>
-    <h5 *ngIf="listFruits.length > 0">Liste des fruits :</h5>
-    <ul>
-      <li *ngFor="let fruit of listFruits">{{ fruit }}</li>
-    </ul>
+    <ion-button *ngIf="isNextQuestion" (click)="nextQuestion()">Question suivante</ion-button>
+    <ion-button *ngIf="isReplay" (click)="replay()">Rejouer</ion-button>
 
-    <p [ngClass]="'high-ground'">Lorem ipsum dolor sit amet</p>
-  </ion-content>
+    <ion-toast [isOpen]="isToastOpen" message="{{ toastMsg }}" (didDismiss)="toastOpen(false)"></ion-toast>
+  </div>
 </ion-content>
