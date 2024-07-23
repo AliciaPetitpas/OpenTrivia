@@ -8,16 +8,16 @@
   <form *ngIf="isError">
     <div [ngClass]="'form-div'">
       <ion-label>Pseudo</ion-label>
-      <input [(ngModel)]="pseudo" [ngModelOptions]="{standalone: true}">
+      <ion-input [(ngModel)]="pseudo" [ngModelOptions]="{standalone: true}"></ion-input>
     </div>
     <div [ngClass]="'form-div'">
       <label>Difficulté</label>
-      <select>
-        <option *ngFor="let level of listLevels">{{ level }}</option>
-      </select>
+      <ion-select>
+        <ion-select-option *ngFor="let level of listLevels">{{ level }}</ion-select-option>
+      </ion-select>
     </div>
     <div [ngClass]="'form-div'">
-      <input type="checkbox" [(ngModel)]="keepInfos" [ngModelOptions]="{standalone: true}">Sauvegarder mes informations
+      <ion-checkbox [(ngModel)]="keepInfos" [ngModelOptions]="{standalone: true}">Sauvegarder mes informations</ion-checkbox>
     </div>
 
     <ion-alert [isOpen]="isAlertOpen" header="Information manquante" message="{{ errorMsg}}" (didDismiss)="alertOpen(false)" [buttons]="alertButtons"></ion-alert>
