@@ -1,7 +1,7 @@
 <h1>Bienvenue {{ pseudo }}</h1>
 
 <ion-text *ngFor="let q of questions">{{ q.question }}</ion-text>
-<ion-list *ngFor="let q of questions">
+<ion-list *ngFor="let q of questions" [ngClass]="'listReplies'">
   <ion-item *ngFor="let p of q.propositions"><ion-button (click)="verifyAnswer(p)">{{ p }}</ion-button></ion-item>
 </ion-list>
 
