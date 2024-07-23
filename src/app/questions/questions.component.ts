@@ -28,11 +28,10 @@ export class QuestionsComponent  implements OnInit {
   ngOnInit() {}
 
   verifyAnswer(data: any) {
-    console.log(data);
     // TODO : vérification réponse
     this.nextQuestion = true;
     this.isToastOpen = true;
-    this.toastMsg = "Votre réponse est: ";
+    this.toastMsg = "Votre réponse est: " + data;
   }
 
   toastOpen(open: boolean) {

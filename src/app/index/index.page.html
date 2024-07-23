@@ -7,7 +7,7 @@
 <ion-content [fullscreen]="true">
   <form *ngIf="isError">
     <div [ngClass]="'form-div'">
-      <label>Pseudo</label>
+      <ion-label>Pseudo</ion-label>
       <input [(ngModel)]="pseudo" [ngModelOptions]="{standalone: true}">
     </div>
     <div [ngClass]="'form-div'">
@@ -22,7 +22,7 @@
 
     <ion-alert [isOpen]="isAlertOpen" header="Information manquante" message="{{ errorMsg}}" (didDismiss)="alertOpen(false)" [buttons]="alertButtons"></ion-alert>
 
-    <button (click)="verifyInfos()">Commencer</button>
+    <ion-button (click)="verifyInfos()">Commencer</ion-button>
   </form>
 
   <div *ngIf="!isError">
