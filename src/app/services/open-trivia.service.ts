@@ -27,7 +27,7 @@ export class OpenTriviaService {
 
   constructor() { }
 
-  getQuestions(difficulty: String): Promise<any[]> {
+  async getQuestions(difficulty: String): Promise<any[]> {
     return new Promise((resolve) => {
       resolve(this.listQuestions);
     })
