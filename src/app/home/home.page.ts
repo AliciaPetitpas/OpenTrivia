@@ -31,7 +31,7 @@ export class HomePage {
   isReplay: boolean = false;
 
   isDisabledQuestion: boolean = false;
-  questionColor: string = "primary";
+  isAnswered: boolean = false;
   points: number = 0;
 
   constructor(private openTriviaSrv: OpenTriviaService) { 
@@ -58,11 +58,8 @@ export class HomePage {
   verifyAnswer(data: any) {
     if (data == this.openTriviaSrv.getCurrentAnswer()) {
       this.points++;
-      this.questionColor = "success";
-    } else {
-      this.questionColor = "danger";
     }
-
+    
     if (this.openTriviaSrv.index >= (this.openTriviaSrv.listQuestions.length - 1)) {
       this.isNextQuestion = false;
       this.isReplay = true;
@@ -70,6 +67,7 @@ export class HomePage {
       this.isNextQuestion = true;
     }
     
+    this.isAnswered = true;
     this.isDisabledQuestion = true;
     this.isToastOpen = true;
     this.toastMsg = "Votre score est de " + this.points + " point.s";
@@ -86,7 +84,7 @@ export class HomePage {
     this.answer = this.openTriviaSrv.getCurrentAnswer();
     this.isNextQuestion = false;
     this.isDisabledQuestion = false;
-    this.questionColor= "primary";
+    this.isAnswered = false;
   }
 
   replay() {
@@ -98,6 +96,6 @@ export class HomePage {
     this.isReplay = false;
     this.isDisabledQuestion = false;
     this.points = 0;
-    this.questionColor= "primary";
+    this.isAnswered = false;
   }
 }

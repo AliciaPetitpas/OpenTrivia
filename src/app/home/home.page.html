@@ -29,9 +29,9 @@
     <h1>Bienvenue {{ pseudo }}</h1>
 
     <ion-text>{{ question }}</ion-text>
-    <ion-list *ngFor="let r of replies">
-      <ion-button (click)="verifyAnswer(r)" [color]="questionColor" disabled={{isDisabledQuestion}}>{{ r }}</ion-button>
-    </ion-list>
+    <div *ngFor="let r of replies">
+      <ion-button (click)="verifyAnswer(r)" [color]="isAnswered ? (r==answer ? 'success' : 'danger') : 'primary'" disabled={{isDisabledQuestion}} expand="full">{{ r }}</ion-button>
+    </div>
 
     <ion-button *ngIf="isNextQuestion" (click)="nextQuestion()">Question suivante</ion-button>
     <ion-button *ngIf="isReplay" (click)="replay()">Rejouer</ion-button>
