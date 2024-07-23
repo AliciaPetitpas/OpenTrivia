@@ -29,13 +29,13 @@
     <h1>Bienvenue {{ pseudo }}</h1>
 
     <ion-text>{{ question }}</ion-text>
-    <ion-list *ngFor="let r of replies" [ngClass]="'listReplies'">
-      <ion-item><ion-button (click)="verifyAnswer(r)" disabled={{isDisabledQuestion}}>{{ r }}</ion-button></ion-item>
+    <ion-list *ngFor="let r of replies">
+      <ion-button (click)="verifyAnswer(r)" [color]="questionColor" disabled={{isDisabledQuestion}}>{{ r }}</ion-button>
     </ion-list>
 
     <ion-button *ngIf="isNextQuestion" (click)="nextQuestion()">Question suivante</ion-button>
     <ion-button *ngIf="isReplay" (click)="replay()">Rejouer</ion-button>
 
-    <ion-toast [isOpen]="isToastOpen" message="{{ toastMsg }}" (didDismiss)="toastOpen(false)"></ion-toast>
+    <ion-toast [isOpen]="isToastOpen" message="{{ toastMsg }}" (didDismiss)="toastOpen(false)" duration="5000"></ion-toast>
   </div>
 </ion-content>
