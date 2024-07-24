@@ -33,7 +33,9 @@ export class OpenTriviaService {
     this.apiSrv.getQuestions(amount, difficulty).subscribe({
       next: (result: any) => {
         console.log(result);
-        this.listQuestions = result.results;
+        if (result.results) {
+          this.listQuestions = result.results;
+        }
       },
       error: (err) => {
         console.log(err);
