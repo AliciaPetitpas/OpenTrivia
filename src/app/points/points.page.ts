@@ -13,6 +13,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 })
 export class PointsPage {
   pseudo: string = "";
+  percent: number = 0;
   amount: number = 1;
   points: number = 0;
   message: string = "";
@@ -23,11 +24,13 @@ export class PointsPage {
         this.pseudo = response.get("pseudo");
         this.points = response.get("points");
         this.amount = response.get("amount");
+        this.percent = (response.get("points") / response.get("amount")) * 100;
 
         if (this.points == 0) {
           this.message = "Désolé " + this.pseudo + ", retente ta chance !";
         } else {
-          this. message = "Bravo " + this.pseudo + ", vous avez gagné " + this.points + "/" + this.amount + " points !";
+          this. message = "Bravo " + this.pseudo + ", vous avez eu " + this.percent + "% de bonnes réponses !";
+          // this. message = "Bravo " + this.pseudo + ", vous avez gagné " + this.points + "/" + this.amount + " points !";
         }
       },
       error: (err) => {
