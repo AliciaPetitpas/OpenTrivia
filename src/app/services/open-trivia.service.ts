@@ -7,23 +7,6 @@ import { APIService } from './api.service';
 })
 export class OpenTriviaService {
   listQuestions: any[] = [];
-  //   {
-  //     category: "Entertainment: Japanese Anime & Manga",
-  //     type: "multiple",
-  //     difficulty: "easy",
-  //     question: "In 'Fairy Tail', what is the nickname of Natsu Dragneel?",
-  //     correct_answer: "The Salamander",
-  //     incorrect_answers: ["The Dragon Slayer", "The Dragon", "The Demon"]
-  //   },
-  //   {
-  //     category: "Entertainment: Video Games",
-  //     type: "boolean",
-  //     difficulty: "medium",
-  //     question: "'Return to Castle Wolfenstein' was the only game of the Wolfenstein series where you don't play as William 'B.J.' Blazkowicz",
-  //     correct_answer: "False",
-  //     incorrect_answers: ["True"]
-  //   }
-  // ];
   index: number = 0;
   replies: any[] = [];
 
@@ -32,7 +15,7 @@ export class OpenTriviaService {
   getQuestions(amount: number, difficulty: string): Observable<any[]>|void {
     this.apiSrv.getQuestions(amount, difficulty).subscribe({
       next: (result: any) => {
-        console.log(result);
+        // console.log(result);
         if (result.results) {
           this.listQuestions = result.results;
         }
@@ -52,8 +35,6 @@ export class OpenTriviaService {
   }
 
   getCurrentQuestion() {
-    console.log(this.listQuestions);
-
     return this.listQuestions[this.index].question;
   }
 

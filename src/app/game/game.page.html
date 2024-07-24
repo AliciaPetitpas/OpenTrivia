@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>OpenTrivia</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <h1>Bienvenue {{ pseudo }}</h1>
+
+    <ion-text>{{ question }}</ion-text>
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let r of replies" size="6">
+          <ion-button (click)="verifyAnswer(r)" [color]="isAnswered ? (r==answer ? 'success' : 'danger') : 'primary'" disabled={{isDisabledQuestion}} expand="full">{{ r }}</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-button *ngIf="isNextQuestion" (click)="nextQuestion()">Question suivante</ion-button>
+    <ion-button *ngIf="isReplay" (click)="viewPoints()">Score</ion-button>
+
+    <ion-toast [isOpen]="isToastOpen" message="{{ toastMsg }}" (didDismiss)="toastOpen(false)" duration="5000"></ion-toast>
+</ion-content>

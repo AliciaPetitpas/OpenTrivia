@@ -10,4 +10,20 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  {
+    path: 'game',
+    redirectTo: 'home',
+  },
+  {
+    path: 'game/:pseudo/:amount/:difficulty',
+    loadComponent: () => import('./game/game.page').then( m => m.GamePage)
+  },
+  {
+    path: 'points',
+    redirectTo: 'home',
+  },
+  {
+    path: 'points/:pseudo/:amount/:difficulty/:points',
+    loadComponent: () => import('./points/points.page').then( m => m.PointsPage)
+  },
 ];

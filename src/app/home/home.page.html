@@ -8,7 +8,7 @@
   <!-- <ion-button (click)="generateCat()">Générer une photo</ion-button>
   <img [src]="imgCat" alt="cat" height="150"> -->
 
-  <form *ngIf="isError">
+  <form>
     <div [ngClass]="'form-div'">
       <ion-label>Pseudo</ion-label>
       <ion-input [(ngModel)]="pseudo" [ngModelOptions]="{standalone: true}"></ion-input>
@@ -29,24 +29,8 @@
 
     <ion-alert [isOpen]="isAlertOpen" header="Information manquante" message="{{ errorMsg }}" (didDismiss)="alertOpen(false)" [buttons]="alertButtons"></ion-alert>
 
-    <ion-button (click)="verifyInfos()">Commencer</ion-button>
+    <ion-button (click)="verifyInfos()" expand=""full>Commencer</ion-button>
   </form>
 
-  <div *ngIf="!isError">
-    <h1>Bienvenue {{ pseudo }}</h1>
-
-    <ion-text>{{ question }}</ion-text>
-    <ion-grid>
-      <ion-row>
-        <ion-col *ngFor="let r of replies" size="6">
-          <ion-button (click)="verifyAnswer(r)" [color]="isAnswered ? (r==answer ? 'success' : 'danger') : 'primary'" disabled={{isDisabledQuestion}} expand="full">{{ r }}</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <ion-button *ngIf="isNextQuestion" (click)="nextQuestion()">Question suivante</ion-button>
-    <ion-button *ngIf="isReplay" (click)="replay()">Rejouer</ion-button>
-
-    <ion-toast [isOpen]="isToastOpen" message="{{ toastMsg }}" (didDismiss)="toastOpen(false)" duration="5000"></ion-toast>
-  </div>
+  <ion-toast [isOpen]="isToastOpen" message="{{ toastMsg }}" (didDismiss)="toastOpen(false)" duration="5000"></ion-toast>
 </ion-content>
