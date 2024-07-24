@@ -14,7 +14,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 export class PointsPage implements OnInit {
   pseudo: string = "";
   amount: number = 1;
-  difficulty: string = "Easy";
   points: number = 0;
   message: string = "";
 
@@ -23,6 +22,7 @@ export class PointsPage implements OnInit {
       next: (response: any) => {
         this.pseudo = response.get("pseudo");
         this.points = response.get("points");
+        this.amount = response.get("amount");
       },
       error: (err) => {
         console.log(err);
@@ -34,7 +34,7 @@ export class PointsPage implements OnInit {
     if (this.points == 0) {
       this.message = "Désolé " + this.pseudo + ", retente ta chance !";
     } else {
-      this. message = "Bravo " + this.pseudo + ", vous avez gagné " + this.points + " points !";
+      this. message = "Bravo " + this.pseudo + ", vous avez gagné " + this.points + "/" + this.amount + " points !";
     }
   }
 

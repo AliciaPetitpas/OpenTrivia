@@ -23,7 +23,7 @@ export const routes: Routes = [
     redirectTo: 'home',
   },
   {
-    path: 'points/:pseudo/:amount/:difficulty/:points',
+    path: 'points/:pseudo/:amount/:points',
     loadComponent: () => import('./points/points.page').then( m => m.PointsPage)
   },
 ];

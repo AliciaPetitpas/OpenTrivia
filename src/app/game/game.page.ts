@@ -86,7 +86,7 @@ export class GamePage implements OnInit {
   }
 
   viewPoints() {
-    this.router.navigate(['/points', this.pseudo, this.amount, this.difficulty, this.points]);
+    this.router.navigate(['/points', this.pseudo, this.amount, this.points]);
   }
 
   replay() {
