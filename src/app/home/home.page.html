@@ -5,6 +5,9 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <!-- <ion-button (click)="generateCat()">Générer une photo</ion-button>
+  <img [src]="imgCat" alt="cat" height="150"> -->
+
   <form *ngIf="isError">
     <div [ngClass]="'form-div'">
       <ion-label>Pseudo</ion-label>
@@ -12,15 +15,19 @@
     </div>
     <div [ngClass]="'form-div'">
       <label>Difficulté</label>
-      <ion-select>
+      <ion-select [(ngModel)]="difficulty" [ngModelOptions]="{standalone: true}">
         <ion-select-option *ngFor="let level of listLevels">{{ level }}</ion-select-option>
       </ion-select>
+    </div>
+    <div [ngClass]="'form-div'">
+      <label>Nombre de questions</label>
+      <ion-input [(ngModel)]="amount" type="number" [ngModelOptions]="{standalone: true}"></ion-input>
     </div>
     <div [ngClass]="'form-div'">
       <ion-toggle [(ngModel)]="keepInfos" [ngModelOptions]="{standalone: true}">Sauvegarder mes informations</ion-toggle>
     </div>
 
-    <ion-alert [isOpen]="isAlertOpen" header="Information manquante" message="{{ errorMsg}}" (didDismiss)="alertOpen(false)" [buttons]="alertButtons"></ion-alert>
+    <ion-alert [isOpen]="isAlertOpen" header="Information manquante" message="{{ errorMsg }}" (didDismiss)="alertOpen(false)" [buttons]="alertButtons"></ion-alert>
 
     <ion-button (click)="verifyInfos()">Commencer</ion-button>
   </form>

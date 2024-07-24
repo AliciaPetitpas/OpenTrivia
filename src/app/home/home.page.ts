@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { OpenTriviaService } from '../services/open-trivia.service';
+import { APIService } from '../services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,8 @@ import { OpenTriviaService } from '../services/open-trivia.service';
 export class HomePage {
   pseudo: string = "";
   listLevels: any [] =  ['Easy', 'Medium', 'Hard'];
+  difficulty: string = "Easy";
+  amount: number = 2;
   keepInfos: boolean = false;
   errorMsg: string = "";
   isError: boolean = true;
@@ -21,9 +24,9 @@ export class HomePage {
   alertButtons: any[] = ['OK'];
 
   questions: any[] = [];
-  question: string;
+  question: string = "";
   replies: any;
-  answer: string;
+  answer: string = "";
 
   isNextQuestion: boolean = false;
   isToastOpen: boolean = false;
@@ -34,11 +37,22 @@ export class HomePage {
   isAnswered: boolean = false;
   points: number = 0;
 
-  constructor(private openTriviaSrv: OpenTriviaService) { 
-    this.questions = this.openTriviaSrv.listQuestions;
-    this.question = this.openTriviaSrv.getCurrentQuestion();
-    this.replies = this.openTriviaSrv.getCurrentReplies();
-    this.answer = this.openTriviaSrv.getCurrentAnswer();
+  imgCat: string = "";
+
+  constructor(private openTriviaSrv: OpenTriviaService, private apiSrv: APIService) {
+    this.openTriviaSrv.getQuestions(this.amount, this.difficulty);
+  }
+
+  generateCat() {
+    this.apiSrv.getCat().subscribe({
+      next: (result: any) => {
+        this.imgCat = this.apiSrv.urlCataas + '?' + result._id;
+        console.log(result);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   verifyInfos() {
@@ -49,7 +63,12 @@ export class HomePage {
       this.errorMsg = "";
       this.isError = false;
     }
-  }
+
+    this.questions = this.openTriviaSrv.listQuestions;
+    this.question = this.openTriviaSrv.getCurrentQuestion();
+    this.replies = this.openTriviaSrv.getCurrentReplies();
+    this.answer = this.openTriviaSrv.getCurrentAnswer();
+}
 
   alertOpen(open: boolean) {
     this.isAlertOpen = open;
@@ -90,6 +109,7 @@ export class HomePage {
   replay() {
     this.isError = true;
     this.openTriviaSrv.reset();
+    this.openTriviaSrv.getQuestions(this.amount, this.difficulty);
     this.question = this.openTriviaSrv.getCurrentQuestion();
     this.replies = this.openTriviaSrv.getCurrentReplies();
     this.answer = this.openTriviaSrv.getCurrentAnswer();
