@@ -11,7 +11,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, IonicModule, RouterLink]
 })
-export class PointsPage implements OnInit {
+export class PointsPage {
   pseudo: string = "";
   amount: number = 1;
   points: number = 0;
@@ -23,22 +23,18 @@ export class PointsPage implements OnInit {
         this.pseudo = response.get("pseudo");
         this.points = response.get("points");
         this.amount = response.get("amount");
+
+        if (this.points == 0) {
+          this.message = "Désolé " + this.pseudo + ", retente ta chance !";
+        } else {
+          this. message = "Bravo " + this.pseudo + ", vous avez gagné " + this.points + "/" + this.amount + " points !";
+        }
       },
       error: (err) => {
         console.log(err);
       }
     })
   }
-
-  ngOnInit() {
-    if (this.points == 0) {
-      this.message = "Désolé " + this.pseudo + ", retente ta chance !";
-    } else {
-      this. message = "Bravo " + this.pseudo + ", vous avez gagné " + this.points + "/" + this.amount + " points !";
-    }
-  }
-
-  
 
   replay() {
     this.router.navigate(['/home'])
