@@ -11,7 +11,7 @@
     <ion-grid>
       <ion-row>
         <ion-col *ngFor="let r of replies" size="6">
-          <ion-button (click)="verifyAnswer(r)" [color]="isAnswered ? (r==answer ? 'success' : 'danger') : 'primary'" disabled={{isDisabledQuestion}} expand="full">{{ r }}</ion-button>
+          <ion-button (click)="verifyAnswer(r)" [color]="isAnswered ? ((r.label == answer) ? 'success' : 'danger') : 'primary'" disabled={{isDisabledQuestion}} expand="full">{{ r.label }}</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

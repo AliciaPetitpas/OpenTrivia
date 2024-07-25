@@ -15,14 +15,16 @@ export class OpenTriviaService {
   getQuestions(amount: number, difficulty: string): Observable<any[]>|void {
     this.apiSrv.getQuestions(amount, difficulty).subscribe({
       next: (result: any) => {
-        // console.log(result);
+        console.log(result);
         if (result.results) {
           this.listQuestions = result.results;
         }
       },
       error: (err) => {
         console.log(err);
-      }
+      }, complete: () => {
+        console.log(this.listQuestions);
+      },
     });
   }
 

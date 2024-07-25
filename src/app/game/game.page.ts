@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { OpenTriviaService } from '../services/open-trivia.service';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
+import { APIService } from '../services/api.service';
+import { Answer } from '../models/answer';
 
 @Component({
   selector: 'app-game',
@@ -21,8 +23,9 @@ export class GamePage implements OnInit {
 
   questions: any[] = [];
   question: string = "";
-  replies: any;
+  replies: any[] = [];
   answer: string = "";
+  index: number = 0;
 
   isNextQuestion: boolean = false;
   isToastOpen: boolean = false;
@@ -33,72 +36,121 @@ export class GamePage implements OnInit {
   isAnswered: boolean = false;
   points: number = 0;
 
-  constructor(private openTriviaSrv: OpenTriviaService, private route: ActivatedRoute, private router: Router) {
-    if (this.openTriviaSrv.listQuestions.length > 1) {
-      this.questions = this.openTriviaSrv.listQuestions;
-      this.question = this.openTriviaSrv.getCurrentQuestion();
-      this.replies = this.openTriviaSrv.getCurrentReplies();
-      this.answer = this.openTriviaSrv.getCurrentAnswer();
-    } else {
-      this.router.navigate(['/home']);
-    }
+  constructor(private apiSrv: APIService, private route: ActivatedRoute, private router: Router) {
+
+  }
+  
+  ngOnInit() {
+    this.pseudo = this.route.snapshot.params["pseudo"];
+    this.difficulty = this.route.snapshot.params["difficulty"];
+    this.amount = this.route.snapshot.params["amount"];
+
+    this.generateQuiz();
+    this.isReplay = false;
+    this.isDisabledQuestion = false;
+    this.points = 0;
+    this.isAnswered = false;
   }
 
-  ngOnInit() {
-    this.route.paramMap.subscribe({
-      next: (response: any) => { 
-        this.pseudo = response.get("pseudo");
-        this.amount = response.get("amount");
-        this.difficulty = response.get("difficulty");
+  generateQuiz() {
+    this.apiSrv.getQuestions(this.amount, this.difficulty).subscribe({
+      next: (response: any) => {
+        if (response.results) {
+          // On parcourt ces questions pour créer la liste de questions du jeu
+          response.results.forEach((question: any) => {
+
+          // On crée un tableau de réponses vide
+          let answers: Answer[] = [];
+
+          // On parcourt la liste de mauvaises réponses retournée par l'API pour ajouter au tableau des objets "Answer"
+          question.incorrect_answers.forEach((element: any) => {
+            answers.push({ label: element, isCorrect: false });
+          });
+          // On ajoute la bonne réponse
+          answers.push({ label: question.correct_answer, isCorrect: true });
+          
+          // Ici on fait un mélange simple du tableau, dans l'absolu on aurait pu aussi utiliser l'algorithme de Fisher-Yates
+          answers.sort((a, b) => 0.5 - Math.random());
+
+          // On crée un objet "Question"
+          this.questions.push({
+            question: question.question,
+            listAnswers: answers,
+            category: question.category
+          });
+        });
+        this.getCurrentQuestion();
+        } else {
+          this.toastMsg = 'Erreur : impossible de contacter l\'API. Veuillez vérifier votre connexion internet !';
+          this.isToastOpen = true;
+        }
       },
       error: (err) => {
-        console.log(err);
+        this.toastMsg = err;
+        this.isToastOpen = true;
+      }
+    });
+  }
+
+  getCurrentQuestion() {
+    this.question = this.questions[this.index].question;
+    this.replies = this.questions[this.index].listAnswers;
+    
+    this.questions[this.index].listAnswers.forEach((a:any) => {
+      if (a.isCorrect == true) {
+        this.answer = a.label;
       }
     })
   }
 
-  verifyAnswer(data: any) {
-    if (data == this.openTriviaSrv.getCurrentAnswer()) {
-      this.points++;
-    }
+  nextQuestion() {
+    this.isNextQuestion = false;
+    this.isDisabledQuestion = false;
+    this.isAnswered = false;
+
+    if (this.index < this.questions.length - 1)
+      this.index++;
+    this.getCurrentQuestion();
+  }
+
+  async verifyAnswer(response: Answer) {
+    this.isNextQuestion = true;
+    this.isAnswered = true;
+    this.isDisabledQuestion = true;
     
-    if (this.openTriviaSrv.index >= (this.openTriviaSrv.listQuestions.length - 1)) {
+    
+    if (response.isCorrect) {
+      this.points++;
+      this.isToastOpen = true;
+      this.toastMsg = 'Votre score est de ' + this.points;
+      await Preferences.remove({ key:'points'});
+      await Preferences.set(
+        {
+        key: 'points',
+        value: this.points.toString(),
+        }
+      )
+    }
+
+    if (this.index >= (this.questions.length - 1)) {
       this.isNextQuestion = false;
       this.isReplay = true;
     } else {
       this.isNextQuestion = true;
     }
-    
-    this.isAnswered = true;
-    this.isDisabledQuestion = true;
-    this.isToastOpen = true;
-    this.toastMsg = "Votre score est de " + this.points + " point.s";
   }
-
-  nextQuestion() {
-    this.openTriviaSrv.incrIndex();
-    this.question = this.openTriviaSrv.getCurrentQuestion();
-    this.replies = this.openTriviaSrv.getCurrentReplies();
-    this.answer = this.openTriviaSrv.getCurrentAnswer();
-    this.isNextQuestion = false;
+  
+  replay() {
+    this.generateQuiz();
+    this.getCurrentQuestion();
+    this.isReplay = false;
     this.isDisabledQuestion = false;
+    this.points = 0;
     this.isAnswered = false;
   }
 
   viewPoints() {
     this.router.navigate(['/points', this.pseudo, this.amount, this.points]);
-  }
-
-  replay() {
-    this.openTriviaSrv.reset();
-    this.openTriviaSrv.getQuestions(this.amount, this.difficulty);
-    this.question = this.openTriviaSrv.getCurrentQuestion();
-    this.replies = this.openTriviaSrv.getCurrentReplies();
-    this.answer = this.openTriviaSrv.getCurrentAnswer();
-    this.isReplay = false;
-    this.isDisabledQuestion = false;
-    this.points = 0;
-    this.isAnswered = false;
   }
 
   toastOpen(open: boolean) {
