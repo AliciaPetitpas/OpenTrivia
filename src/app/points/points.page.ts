@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-points',
@@ -39,7 +40,8 @@ export class PointsPage {
     })
   }
 
-  replay() {
+  async replay() {
+    await Preferences.set({ key:'points', value:'0' });
     this.router.navigate(['/home'])
   }
 }

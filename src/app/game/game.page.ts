@@ -123,7 +123,6 @@ export class GamePage implements OnInit {
       this.points++;
       this.isToastOpen = true;
       this.toastMsg = 'Votre score est de ' + this.points;
-      await Preferences.remove({ key:'points'});
       await Preferences.set(
         {
         key: 'points',

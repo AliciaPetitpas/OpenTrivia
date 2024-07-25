@@ -90,11 +90,13 @@ export class HomePage {
     let pseudoStorage = (await Preferences.get({ key: 'pseudo' })).value;
     let difficultyStorage = (await Preferences.get({ key: 'difficulty' })).value;
     let amountStorage = (await Preferences.get({ key: 'amount' })).value;
+    await Preferences.set({ key:'points', value:'0' });
 
     if (pseudoStorage != "") {
       this.pseudo = pseudoStorage!;
       this.difficulty = difficultyStorage!;
       this.amount = parseInt(amountStorage!);
+      this.points = 0;
       this.keepInfos = true;
     }
   }
