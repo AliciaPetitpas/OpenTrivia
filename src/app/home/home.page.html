@@ -20,16 +20,13 @@
       </ion-select>
     </div>
     <div [ngClass]="'form-div'">
-      <label>Nombre de questions</label>
+      <label>Questions</label>
       <ion-input [(ngModel)]="amount" type="number" [ngModelOptions]="{standalone: true}"></ion-input>
     </div>
-    <div [ngClass]="'form-div'">
-      <ion-toggle [(ngModel)]="keepInfos" [ngModelOptions]="{standalone: true}">Sauvegarder mes informations</ion-toggle>
-    </div>
+    <ion-toggle [(ngModel)]="keepInfos" [ngModelOptions]="{standalone: true}">Sauvegarder mes informations</ion-toggle>
 
     <ion-alert [isOpen]="isAlertOpen" header="Information manquante" message="{{ errorMsg }}" (didDismiss)="alertOpen(false)" [buttons]="alertButtons"></ion-alert>
-
-    <ion-button (click)="verifyInfos()" expand=""full>Commencer</ion-button>
+    <ion-button (click)="verifyInfos()" color="tertiary">Commencer</ion-button>
   </form>
 
   <ion-toast [isOpen]="isToastOpen" message="{{ toastMsg }}" (didDismiss)="toastOpen(false)" duration="5000"></ion-toast>
