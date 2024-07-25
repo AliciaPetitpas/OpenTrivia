@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { OpenTriviaService } from '../services/open-trivia.service';
 import { APIService } from '../services/api.service';
 import { Router, RouterLink } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-home',
@@ -53,7 +54,7 @@ export class HomePage {
       this.isError = false;
       this.router.navigate(['/game', this.pseudo, this.amount, this.difficulty]);
     }
-}
+  }
 
   alertOpen(open: boolean) {
     this.isAlertOpen = open;
@@ -61,5 +62,14 @@ export class HomePage {
 
   toastOpen(open: boolean) {
     this.isToastOpen = open;
+  }
+
+  async saveInfos() {
+    await Preferences.set(
+      {
+        key: 'pseudo',
+        value: this.pseudo,
+      }
+    )
   }
 }
