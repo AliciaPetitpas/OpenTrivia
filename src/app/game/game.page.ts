@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Preferences } from '@capacitor/preferences';
 import { APIService } from '../services/api.service';
 import { Answer } from '../models/answer';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-game',
@@ -36,7 +36,7 @@ export class GamePage implements OnInit {
   isAnswered: boolean = false;
   points: number = 0;
 
-  constructor(private apiSrv: APIService, private route: ActivatedRoute, private router: Router) {
+  constructor(private apiSrv: APIService, private route: ActivatedRoute, private router: Router, private storageSrv: StorageService) {
 
   }
   
@@ -123,12 +123,7 @@ export class GamePage implements OnInit {
       this.points++;
       this.isToastOpen = true;
       this.toastMsg = 'Votre score est de ' + this.points;
-      await Preferences.set(
-        {
-        key: 'points',
-        value: this.points.toString(),
-        }
-      )
+      this.storageSrv.setPoints(this.points);
     }
 
     if (this.index >= (this.questions.length - 1)) {

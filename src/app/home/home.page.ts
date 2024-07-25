@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
-import { Preferences } from '@capacitor/preferences';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +28,7 @@ export class HomePage {
 
   imgCat: string = "";
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private storageSrv: StorageService) {
   }
 
   async verifyInfos() {
@@ -40,37 +40,17 @@ export class HomePage {
       this.isError = false;
 
       if (this.keepInfos) {
-        await Preferences.set(
-          {
-            key: 'pseudo',
-            value: this.pseudo,
-          }
-        );
-        await Preferences.set(
-          {
-            key: 'difficulty',
-            value: this.difficulty,
-          }
-        );
-        await Preferences.set(
-          {
-            key: 'points',
-            value: this.points.toString(),
-          }
-        );
-        await Preferences.set(
-          {
-            key: 'amount',
-            value: this.amount.toString(),
-          }
-        );
+        this.storageSrv.setData({
+          pseudo: this.pseudo,
+          difficulty: this.difficulty,
+          amount: this.amount
+        });
+        this.storageSrv.setPoints(this.points);
       } else {
-        let pseudoStorage = (await Preferences.get({ key: 'pseudo' })).value;
-        if (pseudoStorage != "") {
-          Preferences.remove({key:'pseudo'});
-          Preferences.remove({key:'difficulty'});
-          Preferences.remove({key:'points'});
-          Preferences.remove({key:'amount'});
+        let storage = this.storageSrv.getData();
+
+        if (await storage) {
+          this.storageSrv.cleanData();
         }
       }
 
@@ -87,16 +67,13 @@ export class HomePage {
   }
 
   async ngOnInit() {
-    let pseudoStorage = (await Preferences.get({ key: 'pseudo' })).value;
-    let difficultyStorage = (await Preferences.get({ key: 'difficulty' })).value;
-    let amountStorage = (await Preferences.get({ key: 'amount' })).value;
-    await Preferences.set({ key:'points', value:'0' });
+    let storage = await this.storageSrv.getData();
+    this.points = 0;
 
-    if (pseudoStorage != "") {
-      this.pseudo = pseudoStorage!;
-      this.difficulty = difficultyStorage!;
-      this.amount = parseInt(amountStorage!);
-      this.points = 0;
+    if (storage?.pseudo) {
+      this.pseudo = storage.pseudo;
+      this.difficulty = storage.difficulty
+      this.amount = parseInt(storage.amount);
       this.keepInfos = true;
     }
   }

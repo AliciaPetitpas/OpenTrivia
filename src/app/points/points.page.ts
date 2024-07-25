@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-points',
@@ -19,7 +20,7 @@ export class PointsPage {
   points: number = 0;
   message: string = "";
 
-  constructor(private router: Router, private route: ActivatedRoute) { 
+  constructor(private router: Router, private route: ActivatedRoute, private storageSrv: StorageService) { 
     this.route.paramMap.subscribe({
       next: (response: any) => {
         this.pseudo = response.get("pseudo");
@@ -41,7 +42,7 @@ export class PointsPage {
   }
 
   async replay() {
-    await Preferences.set({ key:'points', value:'0' });
+    this.storageSrv.cleanPoints();
     this.router.navigate(['/home'])
   }
 }
